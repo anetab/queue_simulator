@@ -3,5 +3,6 @@ source :rubygems
 gem 'pry'
 gem 'redis'
 gem 'rspec'
+gem 'simplecov', require: false
 
 
