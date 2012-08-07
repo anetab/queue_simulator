@@ -1,31 +1,17 @@
 require 'redis'
+
 module QueueSimulator
-
-  extend self
-
-  @@interrupt = false
-
-  def interrupt
-    @@interrupt = true
-  end
-
-  def interrupted?
-    @@interrupt
-  end
-
   module Generator
     extend self
 
     MAX_JOB_NUMBER = 9
     MAX_SLEEP_TIME = 6
 
+    attr_reader :job_thread
+
     @queue_key = 'queue1'
     @random = Random.new()
     @job_thread = nil
-
-    def job_thread
-      @job_thread
-    end
 
     def join_thread
       job_thread.join

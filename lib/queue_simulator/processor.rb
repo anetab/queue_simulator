@@ -1,4 +1,5 @@
 require 'redis'
+
 module QueueSimulator
 
   module Processor
@@ -7,13 +8,11 @@ module QueueSimulator
     MAX_WORKER_NUMBER = 3
     MAX_SLEEP_TIME = 3
 
+    attr_reader :worker_threads
+
     @queue_key = 'queue1'
     @random = Random.new()
     @worker_threads = []
-
-    def worker_threads
-      @worker_threads
-    end
 
     def number_of_workers
       if !(@number_of_workers)
