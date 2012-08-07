@@ -12,7 +12,7 @@ describe QueueSimulator do
   end
 
   it 'stops the program when interrupt is true' do
-    QueueSimulator.interrupt
+    QueueSimulator.stop
     sleep(QueueSimulator::Generator::MAX_SLEEP_TIME+1)
     generator.job_thread.alive?.should be false
   end

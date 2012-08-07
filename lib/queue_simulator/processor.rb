@@ -27,11 +27,11 @@ module QueueSimulator
     end
 
     def perform
-      trap("INT") { QueueSimulator.interrupt }
+      trap("INT") { QueueSimulator.stop}
       @redis = Redis.new()
       number_of_workers.times do
         @worker_threads << Thread.new do
-          until QueueSimulator.interrupted? do
+          until QueueSimulator.stopped? do
             puts "processed job #{@redis.rpop(@queue_key)}"
             sleep(@random.rand(MAX_SLEEP_TIME))
           end

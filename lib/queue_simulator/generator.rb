@@ -31,7 +31,7 @@ module QueueSimulator
       @job_thread = Thread.new do
         current_number_of_jobs = 0
 
-        until QueueSimulator.interrupted? do
+        until QueueSimulator.stopped? do
           number_of_jobs_to_add = (1..MAX_JOB_NUMBER).to_a.sample
           jobs = QueueSimulator::Generator.jobs_to_add(current_number_of_jobs, number_of_jobs_to_add)
 

@@ -3,12 +3,16 @@ module QueueSimulator
 
   @@interrupt = false
 
-  def interrupt
+  def stop
     @@interrupt = true
   end
 
-  def interrupted?
+  def stopped?
     @@interrupt
+  end
+
+  def start
+    @@interrupt = false
   end
 end
 
