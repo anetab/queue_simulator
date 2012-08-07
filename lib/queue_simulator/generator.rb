@@ -1,28 +1,20 @@
 require 'redis'
 
 module QueueSimulator
-  module Generator
-    extend self
-
+  class Generator
     MAX_JOB_NUMBER = 9
     MAX_SLEEP_TIME = 6
 
     attr_reader :job_thread
 
-    @queue_key = 'queue1'
-    @random = Random.new()
-    @job_thread = nil
-
-    def join_thread
-      job_thread.join
+    def initialize(queue_name)
+      @queue_name = queue_name
+      @redis = Redis.new()
+      @current_number_of_jobs = 0
     end
 
-    def job_number
-      1 + @random.rand(MAX_JOB_NUMBER)
-    end
-
-    def jobs_to_add(i, number)
-      Array((i + 1)..(i + number))
+    def self.jobs_to_add(i, number)
+      ((i + 1)..(i + number)).to_a
     end
 
     def add_jobs_to_queue(queue, jobs)
@@ -33,29 +25,23 @@ module QueueSimulator
       puts @redis.lrange(queue, 0, -1)
     end
 
-    def update(old_value, increment)
-      old_value += increment
-    end
-
-    def redis_cleanup
-      @redis.flushdb
-    end
-
     def perform
-      trap("INT") { QueueSimulator.interrupt }
-      @redis = Redis.new()
-      redis_cleanup
+      @redis.flushdb
 
       @job_thread = Thread.new do
         current_number_of_jobs = 0
+
         until QueueSimulator.interrupted? do
-          number_of_added_jobs = job_number
-          jobs = jobs_to_add(current_number_of_jobs, number_of_added_jobs)
+          number_of_jobs_to_add = (1..MAX_JOB_NUMBER).to_a.sample
+          jobs = QueueSimulator::Generator.jobs_to_add(current_number_of_jobs, number_of_jobs_to_add)
+
           puts "jobs to add #{jobs}"
-          add_jobs_to_queue(@queue_key, jobs)
-          current_number_of_jobs = update(current_number_of_jobs, number_of_added_jobs)
-          show_jobs_in_queue(@queue_key)
-          sleep(@random.rand(MAX_SLEEP_TIME))
+
+          add_jobs_to_queue(@queue_name, jobs)
+          current_number_of_jobs += number_of_jobs_to_add
+          show_jobs_in_queue(@queue_name)
+
+          sleep((1..MAX_SLEEP_TIME).to_a.sample)
         end
       end
     end
