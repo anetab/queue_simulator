@@ -16,7 +16,7 @@ module QueueSimulator
   module Generator
     extend self
 
-    MAX_JOB_NUMBER = 8
+    MAX_JOB_NUMBER = 9
     MAX_SLEEP_TIME = 6
 
     @queue_key = 'queue1'
