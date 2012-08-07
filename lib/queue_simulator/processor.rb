@@ -30,13 +30,12 @@ module QueueSimulator
     def perform
       trap("INT") { QueueSimulator.interrupt }
       @redis = Redis.new()
-        number_of_workers.times do
-         @worker_threads << Thread.new do
-            loop do
-              exit if QueueSimulator.interrupted?
-              puts "processed job #{@redis.rpop(@queue_key)}"
-              sleep(@random.rand(MAX_SLEEP_TIME))
-            end
+      number_of_workers.times do
+        @worker_threads << Thread.new do
+          until QueueSimulator.interrupted? do
+            puts "processed job #{@redis.rpop(@queue_key)}"
+            sleep(@random.rand(MAX_SLEEP_TIME))
+          end
         end
       end
     end

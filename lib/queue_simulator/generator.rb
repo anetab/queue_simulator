@@ -62,8 +62,7 @@ module QueueSimulator
 
       @job_thread = Thread.new do
         current_number_of_jobs = 0
-        loop do
-          exit if QueueSimulator.interrupted?
+        until QueueSimulator.interrupted? do
           number_of_added_jobs = job_number
           jobs = jobs_to_add(current_number_of_jobs, number_of_added_jobs)
           puts "jobs to add #{jobs}"
