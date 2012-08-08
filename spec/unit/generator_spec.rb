@@ -3,10 +3,11 @@ require 'queue_simulator'
 
 module QueueSimulator
   describe Generator do
-    let(:queue_name){"queue1"}
+    let(:queue_name){"queue2"}
     let(:generator){QueueSimulator::Generator.new(queue_name)}
 
     before :each do
+      QueueSimulator.stop
       QueueSimulator.start
     end
 
@@ -18,7 +19,7 @@ module QueueSimulator
       redis = Redis.new()
       redis.flushdb
       generator.add_jobs_to_queue([1,2,3,7,9])
-      redis.lrange("queue1", 0, -1).should eq ["9","7","3","2","1"]
+      redis.lrange(queue_name, 0, -1).should eq ["9","7","3","2","1"]
     end
 
     it 'adds jobs to the queue when perform is called' do
@@ -26,5 +27,14 @@ module QueueSimulator
       generator.perform
       sleep(3)
     end
+
+    it 'stops adding jobs when the QueueSimulator is stopped' do
+      generator.perform
+      sleep(1)
+      QueueSimulator.stop
+      sleep(QueueSimulator::Generator::MAX_SLEEP_TIME + 1)
+      generator.job_thread.alive?.should be false
+    end
+
   end
 end
