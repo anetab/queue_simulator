@@ -4,10 +4,11 @@ require 'queue_simulator'
 describe QueueSimulator do
   let(:queue_name) {"queue1"}
   let(:generator){QueueSimulator::Generator.new(queue_name)}
+  let(:processor){QueueSimulator::Processor.new(queue_name)}
 
   before :each do
     generator.perform
-    QueueSimulator::Processor.perform
+    processor.perform
     sleep(10)
   end
 
