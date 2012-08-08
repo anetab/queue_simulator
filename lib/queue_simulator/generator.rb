@@ -17,12 +17,12 @@ module QueueSimulator
       ((i + 1)..(i + number)).to_a
     end
 
-    def add_jobs_to_queue(queue, jobs)
-      @redis.lpush(queue, jobs)
+    def add_jobs_to_queue(jobs)
+      @redis.lpush(@queue_name, jobs)
     end
 
-    def show_jobs_in_queue(queue)
-      puts @redis.lrange(queue, 0, -1)
+    def show_jobs_in_queue
+      puts @redis.lrange(@queue_name, 0, -1)
     end
 
     def perform
@@ -37,11 +37,11 @@ module QueueSimulator
 
           puts "jobs to add #{jobs}"
 
-          add_jobs_to_queue(@queue_name, jobs)
+          add_jobs_to_queue(jobs)
           current_number_of_jobs += number_of_jobs_to_add
-          show_jobs_in_queue(@queue_name)
+          show_jobs_in_queue
 
-          sleep((1..MAX_SLEEP_TIME).to_a.sample)
+          sleep((0..MAX_SLEEP_TIME).to_a.sample)
         end
       end
     end
