@@ -1,6 +1,6 @@
 source :rubygems
 
-gem 'redis'
+gemspec
 
 group :test, :development do
   gem 'pry'
