@@ -13,6 +13,7 @@ module QueueSimulator
 
   def start
     @@interrupt = false
+    trap("INT") { QueueSimulator.stop}
   end
 end
 

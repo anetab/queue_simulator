@@ -24,8 +24,6 @@ module QueueSimulator
     end
 
     def perform
-      trap("INT") { QueueSimulator.stop}
-      @redis = Redis.new()
       number_of_workers = (1..MAX_WORKER_NUMBER).to_a.sample
       number_of_workers.times do
         @worker_threads << Thread.new do
