@@ -28,7 +28,8 @@ module QueueSimulator
       number_of_workers.times do
         @worker_threads << Thread.new do
           until QueueSimulator.stopped? do
-            puts "processed job #{remove_job}"
+            remove_job
+            #puts "processed job #{remove_job}"
             sleep((0..MAX_SLEEP_TIME).to_a.sample)
           end
         end

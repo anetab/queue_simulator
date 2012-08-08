@@ -35,11 +35,11 @@ module QueueSimulator
           number_of_jobs_to_add = (1..MAX_JOB_NUMBER).to_a.sample
           jobs = QueueSimulator::Generator.jobs_to_add(current_number_of_jobs, number_of_jobs_to_add)
 
-          puts "jobs to add #{jobs}"
+         # puts "jobs to add #{jobs}"
 
           add_jobs_to_queue(jobs)
           current_number_of_jobs += number_of_jobs_to_add
-          show_jobs_in_queue
+         # show_jobs_in_queue
 
           sleep((0..MAX_SLEEP_TIME).to_a.sample)
         end
